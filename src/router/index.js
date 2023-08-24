@@ -1,12 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import UserList from "../views/UserList.vue";
-import ItemList from "../views/ItemList.vue";
 import { auth as store } from "../store/auth.module";
 import Login from "../views/Login";
-import ItemListForUser from "@/views/ItemListForUser";
 import Chat from "@/views/Chat.vue";
-
+import RelativesList from "@/views/RelativesList.vue";
+import StatusListDoi from "@/views/StatusListDoi.vue";
+import MedicalRecordList from "@/views/MedicalRecordList.vue";
+import ChatPage from "@/views/ChatPage.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -29,9 +30,33 @@ const routes = [
   },
 
   {
-    path: "/items",
-    name: "Items",
-    component: ItemList,
+    path: "/relatives",
+    name: "RelativeList",
+    component: RelativesList,
+    beforeEnter: (to, from, next) => {
+      if (store.state.status.loggedIn) {
+        next();
+      } else {
+        next({ name: "Home" });
+      }
+    },
+  },
+  {
+    path: "/status",
+    name: "StatusListDoi",
+    component: StatusListDoi,
+    beforeEnter: (to, from, next) => {
+      if (store.state.status.loggedIn) {
+        next();
+      } else {
+        next({ name: "Home" });
+      }
+    },
+  },
+  {
+    path: "/medicalRecords",
+    name: "MedicalRecordList",
+    component: MedicalRecordList,
     beforeEnter: (to, from, next) => {
       if (store.state.status.loggedIn) {
         next();
@@ -53,17 +78,18 @@ const routes = [
     },
   },
   {
-    path: "/itemsforusr",
-    name: "ItemsForUser",
-    component: ItemListForUser,
+    path: "/chatPage",
+    name: "ChatPage",
+    component: ChatPage,
     beforeEnter: (to, from, next) => {
       if (store.state.status.loggedIn) {
         next();
       } else {
-        next({name: "Home"});
+        next({ name: "Home" });
       }
     },
   },
+
   {
     path: "/about",
     name: "About",

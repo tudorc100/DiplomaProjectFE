@@ -35,5 +35,26 @@ export default {
     }).then((response) => {
       return response.data;
     });
+  },
+  makeAdmin(id) {
+    return HTTP.post(BASE_URL + "/users/admin/" + id, {}, {
+      headers: authHeader(),
+    }).then((response) => {
+      return response.data;
+    });
+  },
+  addFamilyMember(id, cnp) {
+    return HTTP.post(BASE_URL + "/users/add-family/" + id, { cnp }, {
+      headers: authHeader(),
+    }).then((response) => {
+      return response.data;
+    });
+  },
+  findFamilyMembers(username) {
+    return HTTP.get(BASE_URL + "/users/family/" + username, { headers: authHeader() }).then(
+        (response) => {
+          return response.data;
+        }
+    );
   }
 }

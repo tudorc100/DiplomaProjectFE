@@ -12,6 +12,26 @@
             <v-form>
               <v-text-field
                   v-if="mode === 'register'"
+                  prepend-icon="mdi-account"
+                  name="name"
+                  label="Name"
+                  v-model="login.name"
+                  validate-on-blur
+                  required
+              >
+              </v-text-field>
+              <v-text-field
+                  v-if="mode === 'register'"
+                  prepend-icon="mdi-account"
+                  name="cnp"
+                  label="Cnp"
+                  v-model="login.cnp"
+                  validate-on-blur
+                  required
+              >
+              </v-text-field>
+              <v-text-field
+                  v-if="mode === 'register'"
                   prepend-icon="mdi-email"
                   name="email"
                   label="Email"
@@ -71,6 +91,9 @@ export default {
   data: () => ({
     mode: "login",
     login: {
+
+      name:"",
+      cnp:"",
       email: "",
       username: "",
       password: "",
@@ -84,7 +107,7 @@ export default {
           if (this.$store.getters["auth/isAdmin"]) {
             router.push("/users");
           } else {
-            router.push("/itemsforusr");
+            router.push("/relatives");
           }
         } else {
           alert("Invalid credentials!");

@@ -1,9 +1,9 @@
 <template>
-  <v-card color="grey lighten-4" flat tile>
-    <v-toolbar>
+  <v-card class="top-bar" flat tile>
+    <v-toolbar color="blue darken-2" dark>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Medical App</v-toolbar-title>
+      <v-toolbar-title class="title">Medical App</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -28,4 +28,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.top-bar {
+  background-color: #3f51b5;
+}
+
+.title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+}
+</style>
