@@ -102,9 +102,9 @@ export default {
 }
 
 .medical-record-dialog-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
-  padding: 24px;
+  padding: 20px;
   background-color: #2196f3;
   color: white;
   border-radius: 8px 8px 0 0;

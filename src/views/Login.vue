@@ -5,7 +5,7 @@
         <v-card class="elevation-12">
           <v-toolbar class="primary lighten-1">
             <v-toolbar-title>
-              <span class="white--text">Medical App Login</span>
+              <span class="white--text">Medical Emergency Platform Login</span>
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
@@ -62,10 +62,11 @@
                 <v-btn
                     class="mr-4"
                     :color="inLoginMode ? 'primary' : 'secondary'"
-                    @click="attemptLogin"
+                    @click=" inLoginMode ? attemptLogin() : attemptRegister()"
                 >
                   {{ inLoginMode ? 'Login' : 'Register' }}
                 </v-btn>
+
                 <v-btn
                     text
                     small
@@ -117,6 +118,7 @@ export default {
 
     async attemptRegister() {
       await this.$store.dispatch("auth/register", this.login);
+      router.push("/relatives");
     },
 
     toggleMode() {

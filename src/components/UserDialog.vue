@@ -14,7 +14,9 @@
           <v-text-field v-model="user.name" label="Name" :readonly="!isAdmin"/>
           <v-text-field v-model="user.email" label="Email" :readonly="!isAdmin"/>
           <v-text-field v-model="user.cnp" label="Cnp" :readonly="!isAdmin"/>
-          <v-text-field v-model="user.password" label="Password" :readonly="!isAdmin"/>
+          <v-text-field v-show="isAdmin&&isNew" v-model="user.password" label="Password" :readonly="!isAdmin"/>
+          <v-text-field v-show="isAdmin&&!isNew" v-model="relativeToAdd" label="Relative to add" :readonly="!isAdmin"/>
+
         </v-form>
         <v-card-actions>
           <v-btn v-if="isAdmin" @click="persist">
@@ -29,6 +31,9 @@
           <v-btn @click="statusList" v-if="!isNew">
             See status
           </v-btn>
+          <v-btn v-if="isAdmin" @click="persist">
+            Add Relative
+          </v-btn>
         </v-card-actions>
       </v-card>
     </template>
@@ -41,6 +46,7 @@ import router from "@/router";
 
 export default {
   name: "UserDialog",
+  relativeToAdd:"",
   props: {
     user: Object,
     opened: Boolean,
@@ -88,6 +94,11 @@ export default {
     {
       localStorage.setItem('userId', this.user.id);
       router.push("/status");
+    },
+    addRelative()
+    {
+      api.addFamilyMember(this.user.id,this.relativeToAdd);
+      this.relativeToAdd='';
     },
   },
 

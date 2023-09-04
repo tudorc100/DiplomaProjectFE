@@ -93,9 +93,9 @@ export default {
 }
 
 .status-dialog-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
-  padding: 24px;
+  padding: 20px;
   background-color: #2196f3;
   color: white;
   border-radius: 8px 8px 0 0;
@@ -104,7 +104,7 @@ export default {
 
 .status-dialog-title::before {
   content: '';
-  position: absolute;
+  position: relative;
   top: -8px;
   left: 0;
   width: 100%;
@@ -123,6 +123,6 @@ export default {
   background-color: #2196f3;
 }
 .status-dialog-button {
-  color: white;
+  color: blue;
 }
 </style>

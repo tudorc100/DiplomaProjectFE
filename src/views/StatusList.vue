@@ -11,7 +11,9 @@
           hide-details
           class="user-list__search"
       ></v-text-field>
+      <v-btn @click="downloadTableAsPDF">Download Status</v-btn>
       <v-btn @click="addStatus" class="user-list__btn" v-if="isAdmin">Add Status</v-btn>
+      <v-btn @click="sendTableViaEmail">E-mail Status</v-btn>
     </v-card-title>
     <v-data-table
         :headers="headers"
@@ -32,8 +34,9 @@
 <script>
 import api from "../api";
 import StatusDialog from "@/components/StatusDialog.vue";
+import {jsPDF} from "jspdf";
 export default {
-  name: "RelativesListDoi",
+  name: "RelativesList",
   components: { StatusDialog },
   data() {
     return {
@@ -66,6 +69,54 @@ export default {
       this.dialogVisible = false;
       this.selectedStatus = {};
       this.statusuri = await api.status.getAllStatusesForUser(localStorage.getItem("userId"));
+    },
+    downloadTableAsPDF() {
+      const doc = new jsPDF();
+      const tableData = [];
+
+      this.statusuri.forEach(item => {
+        const rowData = [];
+        rowData.push(item.id);
+        rowData.push(item.timestamp);
+        rowData.push(item.status);
+
+
+        tableData.push(rowData);
+      });
+
+      doc.autoTable({
+        head: [['Id', 'Timestamp', 'Status']], // column headers
+        body: tableData,
+      });
+
+      doc.save('table-data.pdf');
+    },
+    sendTableViaEmail() {
+      const doc = new jsPDF();
+      const tableData = [];
+
+      this.statusuri.forEach(item => {
+        const rowData = [];
+        rowData.push(item.id);
+        rowData.push(item.timestamp);
+        rowData.push(item.status);
+
+
+        tableData.push(rowData);
+      });
+
+      doc.autoTable({
+        head: [['Id', 'Timestamp', 'Status']], // column headers
+        body: tableData,
+      });
+      const user = JSON.parse(localStorage.getItem("user"));
+      const blob = new Blob([doc.output('arraybuffer')], {type: 'application/pdf'});
+
+      // Create form data to send Blob and username
+      const formData = new FormData();
+      formData.append('document', blob, 'table-data.pdf');
+      formData.append('username', user.username); // replace with the actual username
+      api.email.send(formData);
     },
   },
   created() {

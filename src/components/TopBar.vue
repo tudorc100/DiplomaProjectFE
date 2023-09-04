@@ -3,10 +3,12 @@
     <v-toolbar color="blue darken-2" dark>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title class="title">Medical App</v-toolbar-title>
+      <v-toolbar-title class="title">Medical Emergency Platform</v-toolbar-title>
 
       <v-spacer></v-spacer>
-
+      <v-btn v-if="isAdmin" icon @click="chat">
+        <v-icon>chat</v-icon>
+      </v-btn>
       <v-btn icon @click="logout">
         <v-icon>logout</v-icon>
       </v-btn>
@@ -23,6 +25,16 @@ export default {
     logout() {
       this.$store.dispatch("auth/logout");
       router.push("/");
+    },
+    chat()
+    {
+      router.push("/chat");
+    },
+  },
+  computed: {
+    isAdmin: function ()
+    {
+      return this.$store.getters["auth/isAdmin"];
     },
   },
 };

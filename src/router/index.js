@@ -3,11 +3,11 @@ import VueRouter from "vue-router";
 import UserList from "../views/UserList.vue";
 import { auth as store } from "../store/auth.module";
 import Login from "../views/Login";
-import Chat from "@/views/Chat.vue";
 import RelativesList from "@/views/RelativesList.vue";
-import StatusListDoi from "@/views/StatusListDoi.vue";
 import MedicalRecordList from "@/views/MedicalRecordList.vue";
-import ChatPage from "@/views/ChatPage.vue";
+import Chat from "@/views/Chat.vue";
+import StatusList from "@/views/StatusList.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -43,8 +43,8 @@ const routes = [
   },
   {
     path: "/status",
-    name: "StatusListDoi",
-    component: StatusListDoi,
+    name: "StatusList",
+    component: StatusList,
     beforeEnter: (to, from, next) => {
       if (store.state.status.loggedIn) {
         next();
@@ -77,25 +77,10 @@ const routes = [
       }
     },
   },
-  {
-    path: "/chatPage",
-    name: "ChatPage",
-    component: ChatPage,
-    beforeEnter: (to, from, next) => {
-      if (store.state.status.loggedIn) {
-        next();
-      } else {
-        next({ name: "Home" });
-      }
-    },
-  },
 
   {
     path: "/about",
     name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },

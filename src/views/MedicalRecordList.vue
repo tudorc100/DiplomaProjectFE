@@ -1,7 +1,7 @@
 <template>
   <v-card class="user-list">
     <v-card-title class="user-list__title">
-      Statuses
+      Medical Records
       <v-spacer></v-spacer>
       <v-text-field
           v-model="search"
@@ -13,6 +13,8 @@
       ></v-text-field>
       <v-btn @click="addMedicalRecord" class="user-list__btn" v-if="isAdmin">Add Medical Record</v-btn>
       <v-btn @click="downloadTableAsPDF">Download Records</v-btn>
+      <v-btn @click="sendTableViaEmail">E-mail Medical Records</v-btn>
+
     </v-card-title>
     <v-data-table
         :headers="headers"
@@ -35,6 +37,7 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import api from "../api";
 import MedicalRecordDialog from "@/components/MedicalRecordDialog.vue";
+
 export default {
   name: "MedicalRecordList",
   components: { MedicalRecordDialog },
@@ -96,6 +99,40 @@ export default {
       });
 
       doc.save('table-data.pdf');
+    },
+    async sendTableViaEmail() {
+      const doc = new jsPDF();
+      const tableData = [];
+
+      // Assuming your table's data is stored in a data property named 'items'
+      this.medicalRecords.forEach(item => {
+        const rowData = [];
+
+        // Assuming columns are: 'name', 'status', 'date' (modify as needed)
+        rowData.push(item.id);
+        rowData.push(item.title);
+        rowData.push(item.department);
+        rowData.push(item.description);
+        rowData.push(item.entryDate);
+
+
+        tableData.push(rowData);
+      });
+
+      doc.autoTable({
+        head: [['Id', 'Title', 'Department', 'Description', 'Date']], // column headers
+        body: tableData,
+      });
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      const blob = new Blob([doc.output('arraybuffer')], {type: 'application/pdf'});
+
+      // Create form data to send Blob and username
+      const formData = new FormData();
+      formData.append('document', blob, 'table-data.pdf');
+      formData.append('username', user.username); // replace with the actual username
+      api.email.send(formData);
+
     },
   },
   created() {
